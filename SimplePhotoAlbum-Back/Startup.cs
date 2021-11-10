@@ -7,6 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Swashbuckle.AspNetCore.Swagger;
+using SimplePhotoAlbum_Back.Extensions.App;
+using SimplePhotoAlbum_Back.Extensions.Service;
 
 namespace SimplePhotoAlbum_Back
 {
@@ -17,6 +20,8 @@ namespace SimplePhotoAlbum_Back
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddSwaggerExt();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -25,9 +30,11 @@ namespace SimplePhotoAlbum_Back
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
             }
 
             app.UseRouting();
+            app.UseSwaggerExt();
 
             app.UseEndpoints(endpoints =>
             {
