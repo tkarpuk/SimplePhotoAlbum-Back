@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace SimplePhotoAlbum_Back.Controllers
@@ -7,6 +8,7 @@ namespace SimplePhotoAlbum_Back.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
+        [AllowAnonymous]
         [HttpGet]
         public string GetCurrentTime()
         {
