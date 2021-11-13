@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using SimplePhotoAlbum_Back.Authorization;
 
 namespace SimplePhotoAlbum_Back.Controllers
 {
@@ -19,7 +20,17 @@ namespace SimplePhotoAlbum_Back.Controllers
         [HttpPost]
         public IActionResult Login(string email, string password)
         {
-            return Ok(JsonSerializer.Serialize("test instead real JWT object"));
+            UserInspector userInspector = new UserInspector(email, password);
+            if (!userInspector.ChekUser())
+            {
+                _logger.LogWarning($"Unknown user email {email}.");
+                return BadRequest(new { errorText = "Invalid email or password." });
+            }
+
+            ClaimIndentity claimIndentity = new ClaimIndentity(userInspector.GetUser());
+            JwtCreator jwtCreator = new JwtCreator(claimIndentity.ReturnClaims());
+
+            return Ok(JsonSerializer.Serialize(jwtCreator.GetResponse()));
         }
     }
 }
