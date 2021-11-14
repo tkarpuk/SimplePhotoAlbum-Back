@@ -5,7 +5,7 @@ using System.IO;
 
 namespace SimplePhotoAlbum.BLL
 {
-    public class PhotoWorker
+    public class PhotoService
     {
         public List<PhotoInfoDto> GetPhotosInfo(int pageSize, int pageN)
         {
@@ -21,15 +21,29 @@ namespace SimplePhotoAlbum.BLL
 
         public PhotoImageDto GetImageById(int id)
         {
-            PhotoImageDto photoImageDto = new PhotoImageDto() { Id = 1, FileName = "17joke.jpg" };
+            PhotoImageDto photoImageDto = new PhotoImageDto() { Id = 1, FileName = "17joke.jpg", ImageType="jpg" };
             photoImageDto.Image = File.ReadAllBytes("C:\\tmp\\17joke.jpg");
             return photoImageDto;
 
         }
 
-        public bool SavePhoto(PhotoInfoDto photoInfoDto, PhotoImageDto photoImageDto)
+        public PhotoInfoDto SavePhoto(PhotoInfoDto photoInfoDto, PhotoImageDto photoImageDto)
         {
-            return (photoImageDto.Image.Length > 1000) && (photoInfoDto.Caption.Length > 0);
+            //if (photoImageDto.Image.Length > 1000) && (photoInfoDto.Caption.Length > 0);
+            PhotoInfoDto resultPhotoInfo = new PhotoInfoDto();
+            //Save PhotoInfo
+            //Save PhotoImage
+            return resultPhotoInfo;
+        }
+
+        public int GetCountPhotos()
+        {
+            return 43;
+        }
+
+        public bool DeletePhoto(int id)
+        {
+            return true;
         }
     }
 }

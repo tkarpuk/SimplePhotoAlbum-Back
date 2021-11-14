@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -33,7 +32,6 @@ namespace SimplePhotoAlbum_Back
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
             }
             app.ConfigureExceptionHandler(logger);
             app.UseSwaggerExt();
@@ -41,8 +39,8 @@ namespace SimplePhotoAlbum_Back
             app.UseRouting();
             app.UseCorsExt("AllowOrigin");
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

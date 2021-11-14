@@ -10,9 +10,9 @@ namespace SimplePhotoAlbum_Back.Controllers
     {
         [AllowAnonymous]
         [HttpGet]
-        public string GetCurrentTime()
+        public ActionResult<string> GetCurrentTime()
         {
-            return DateTime.Now.ToString("G");
+            return Ok(DateTime.Now.ToString("G"));
         }
     }
 }
