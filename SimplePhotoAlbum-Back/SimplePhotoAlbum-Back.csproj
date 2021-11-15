@@ -19,6 +19,11 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.12" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.14.1" />
     <PackageReference Include="NLog.Config" Version="4.7.12" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
@@ -28,6 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SimplePhotoAlbum.BLL\SimplePhotoAlbum.BLL.csproj" />
+    <ProjectReference Include="..\SimplePhotoAlbum.DAL\SimplePhotoAlbum.DAL.csproj" />
   </ItemGroup>
 
 </Project>
