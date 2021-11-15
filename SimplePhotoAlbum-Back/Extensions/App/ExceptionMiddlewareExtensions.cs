@@ -21,7 +21,7 @@ namespace SimplePhotoAlbum_Back.Extensions.App
                     if (contextFeature != null)
                     {
                         logger.LogError($"Something went wrong: {contextFeature.Error}");
-                        await context.Response.WriteAsync(new ErrorDetails()
+                        await context.Response.WriteAsync(new ErrorDetailsView()
                         {
                             StatusCode = context.Response.StatusCode,
                             Message = "Internal Server Error."

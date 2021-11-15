@@ -6,8 +6,8 @@ namespace SimplePhotoAlbum_Back.Authorization
 {
     public class ClaimIndentity
     {
-        private User _user;
-        public ClaimIndentity(User user)
+        private UserView _user;
+        public ClaimIndentity(UserView user)
         {
             _user = user;
         }

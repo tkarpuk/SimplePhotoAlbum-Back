@@ -4,7 +4,7 @@ namespace SimplePhotoAlbum_Back.Authorization
 {
     public class UserInspector
     {
-        private User _user = new User();
+        private UserView _user = new UserView();
         public UserInspector(string email, string password)
         {
             _user.Email = email;
@@ -17,7 +17,7 @@ namespace SimplePhotoAlbum_Back.Authorization
             return (_user.Email.Contains("@") && _user.Password == "1");
         }
 
-        public User GetUser()
+        public UserView GetUser()
         {
             return _user;
         }

@@ -3,7 +3,7 @@ using SimplePhotoAlbum_Back.Models;
 
 namespace SimplePhotoAlbum_Back.Validations
 {
-    public class PhotoInfoValidator : AbstractValidator<PhotoInfo>
+    public class PhotoInfoValidator : AbstractValidator<PhotoInfoView>
     {
         public PhotoInfoValidator()
         {

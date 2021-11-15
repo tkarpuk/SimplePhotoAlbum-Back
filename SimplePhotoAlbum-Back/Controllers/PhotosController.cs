@@ -23,11 +23,11 @@ namespace SimplePhotoAlbum_Back.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        private PhotoImage ExtractPhotoImage(IFormCollection formCollection)
+        private PhotoImageView ExtractPhotoImage(IFormCollection formCollection)
         {
             var file = formCollection.Files[0];
             BinaryReader br = new BinaryReader(file.OpenReadStream());
-            PhotoImage photoImage = new PhotoImage()
+            PhotoImageView photoImage = new PhotoImageView()
             {
                 FileName = file.FileName,
                 ImageType = file.ContentType,
@@ -37,9 +37,9 @@ namespace SimplePhotoAlbum_Back.Controllers
             return photoImage;
         }
 
-        private PhotoInfo ExtractPhotoInfo(IFormCollection formCollection)
+        private PhotoInfoView ExtractPhotoInfo(IFormCollection formCollection)
         {
-            PhotoInfo photoInfo = new PhotoInfo()
+            PhotoInfoView photoInfo = new PhotoInfoView()
             {
                 Id = 0,
                 Caption = formCollection["caption"].ToString(),
@@ -58,12 +58,12 @@ namespace SimplePhotoAlbum_Back.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<PhotoInfo>> GetAll()
+        public ActionResult<IEnumerable<PhotoInfoView>> GetAll()
         {
             int pageSize = Request.Query["pageSize"].ToString().StrToIntDefault(10);
             int pageN = Request.Query["pageN"].ToString().StrToIntDefault(1);
 
-            var photoInfoItems = _mapper.Map<IEnumerable<PhotoInfo>>(_photoSevice.GetPhotosInfo(pageSize, pageN));
+            var photoInfoItems = _mapper.Map<IEnumerable<PhotoInfoView>>(_photoSevice.GetPhotosInfo(pageSize, pageN));
 
             return Ok(photoInfoItems);
         }
@@ -77,33 +77,33 @@ namespace SimplePhotoAlbum_Back.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<PhotoInfo> GetPhotoById(int id)
+        public ActionResult<PhotoInfoView> GetPhotoById(int id)
         {
-            var photoInfo = _mapper.Map<PhotoInfo>(_photoSevice.GetPhotoInfoById(id));
+            var photoInfo = _mapper.Map<PhotoInfoView>(_photoSevice.GetPhotoInfoById(id));
 
             return Ok(photoInfo);
         }
 
         [HttpGet("{id:int}/image")]
-        public ActionResult<PhotoImage> GetImageById(int id)
+        public ActionResult<PhotoImageView> GetImageById(int id)
         {
-            var photoImage = _mapper.Map<PhotoImage>(_photoSevice.GetImageById(id));
+            var photoImage = _mapper.Map<PhotoImageView>(_photoSevice.GetImageById(id));
 
             return Ok(photoImage);
         }
 
         [HttpPost, DisableRequestSizeLimit]
-        public async Task<ActionResult<PhotoInfo>> CreatePhotoWithImage()
+        public async Task<ActionResult<PhotoInfoView>> CreatePhotoWithImage()
         {
-            PhotoInfo resultPhotoInfo = new PhotoInfo();
+            PhotoInfoView resultPhotoInfo = new PhotoInfoView();
             var formCollection = await Request.ReadFormAsync();
 
             try
             {
-                PhotoInfo photoInfo = ExtractPhotoInfo(formCollection);
-                PhotoImage photoImage = ExtractPhotoImage(formCollection);
+                PhotoInfoView photoInfo = ExtractPhotoInfo(formCollection);
+                PhotoImageView photoImage = ExtractPhotoImage(formCollection);
 
-                resultPhotoInfo = _mapper.Map<PhotoInfo>(
+                resultPhotoInfo = _mapper.Map<PhotoInfoView>(
                     _photoSevice.SavePhoto(
                         _mapper.Map<PhotoInfoDto>(photoInfo), 
                         _mapper.Map<PhotoImageDto>(photoImage)
@@ -120,7 +120,7 @@ namespace SimplePhotoAlbum_Back.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult UpdatePhoto(int id, PhotoInfo photoInfo)
+        public IActionResult UpdatePhoto(int id, PhotoInfoView photoInfo)
         {
             if (id != photoInfo.Id)
             {

@@ -2,7 +2,7 @@
 
 namespace SimplePhotoAlbum_Back.Models
 {
-    public class ErrorDetails
+    public class ErrorDetailsView
     {
         public int StatusCode { get; set; }
         public string Message { get; set; }
