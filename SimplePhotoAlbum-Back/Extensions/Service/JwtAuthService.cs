@@ -2,10 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SimplePhotoAlbum_Back.Authorization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SimplePhotoAlbum_Back.Extensions.Service
 {

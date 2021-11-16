@@ -47,8 +47,8 @@ namespace SimplePhotoAlbum_Back
             app.UseRouting();
             app.UseCorsExt("AllowOrigin");
 
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -10,9 +10,11 @@ using System;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using SimplePhotoAlbum.DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SimplePhotoAlbum_Back.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PhotosController : ControllerBase
