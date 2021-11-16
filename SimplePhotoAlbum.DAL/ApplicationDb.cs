@@ -6,8 +6,8 @@ namespace SimplePhotoAlbum.DAL
 {
     public class ApplicationDb : DbContext
     {
-        public DbSet<PhotoInfo> photoInfos { get; set; }
-        public DbSet<PhotoImage> photoImages { get; set; }
+        public DbSet<PhotoInfo> PhotoInfos { get; set; }
+        public DbSet<PhotoImage> PhotoImages { get; set; }
 
         public ApplicationDb(DbContextOptions options) : base(options) {}
 

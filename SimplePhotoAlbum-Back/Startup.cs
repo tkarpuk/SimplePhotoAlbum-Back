@@ -22,6 +22,7 @@ namespace SimplePhotoAlbum_Back
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<PhotoService>();
+            services.AddTransient<UnitOfWork>();
 
             services.AddDbServiceExt(_configuration.GetConnectionString("DefaultConnection"));
             services.AddFormConfigExt();

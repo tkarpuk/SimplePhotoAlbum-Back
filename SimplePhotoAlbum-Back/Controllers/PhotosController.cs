@@ -4,13 +4,12 @@ using SimplePhotoAlbum.BLL;
 using SimplePhotoAlbum_Back.Models;
 using System.Collections.Generic;
 using SimplePhotoAlbum_Back.Extensions;
-using SimplePhotoAlbum.BLL.ModelsDto;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
-using System.Text.Json;
 using Microsoft.AspNetCore.Http;
+using SimplePhotoAlbum.DAL.Entities;
 
 namespace SimplePhotoAlbum_Back.Controllers
 {
@@ -76,7 +75,7 @@ namespace SimplePhotoAlbum_Back.Controllers
             return Ok(countPhotos);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id}")]
         public ActionResult<PhotoInfoView> GetPhotoById(int id)
         {
             var photoInfo = _mapper.Map<PhotoInfoView>(_photoSevice.GetPhotoInfoById(id));
@@ -84,10 +83,10 @@ namespace SimplePhotoAlbum_Back.Controllers
             return Ok(photoInfo);
         }
 
-        [HttpGet("{id:int}/image")]
+        [HttpGet("{id}/image")]
         public ActionResult<PhotoImageView> GetImageById(int id)
         {
-            var photoImage = _mapper.Map<PhotoImageView>(_photoSevice.GetImageById(id));
+            var photoImage = _mapper.Map<PhotoImageView>(_photoSevice.GetImageByInfoId(id));
 
             return Ok(photoImage);
         }
@@ -95,7 +94,6 @@ namespace SimplePhotoAlbum_Back.Controllers
         [HttpPost, DisableRequestSizeLimit]
         public async Task<ActionResult<PhotoInfoView>> CreatePhotoWithImage()
         {
-            PhotoInfoView resultPhotoInfo = new PhotoInfoView();
             var formCollection = await Request.ReadFormAsync();
 
             try
@@ -103,12 +101,10 @@ namespace SimplePhotoAlbum_Back.Controllers
                 PhotoInfoView photoInfo = ExtractPhotoInfo(formCollection);
                 PhotoImageView photoImage = ExtractPhotoImage(formCollection);
 
-                resultPhotoInfo = _mapper.Map<PhotoInfoView>(
-                    _photoSevice.SavePhoto(
-                        _mapper.Map<PhotoInfoDto>(photoInfo), 
-                        _mapper.Map<PhotoImageDto>(photoImage)
-                        )
-                    );
+                _photoSevice.SavePhoto(
+                        _mapper.Map<PhotoInfo>(photoInfo),
+                        _mapper.Map<PhotoImage>(photoImage)
+                        );
             }
             catch (Exception e)
             {
@@ -116,33 +112,26 @@ namespace SimplePhotoAlbum_Back.Controllers
                 return NotFound();
             }
 
-            return Ok(resultPhotoInfo);
+            return NoContent();
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{id}")]
         public IActionResult UpdatePhoto(int id, PhotoInfoView photoInfo)
         {
             if (id != photoInfo.Id)
             {
                 return BadRequest();
             }
-            /*
-            if (!_photoSevice.UpdatePhoto(id))
-            {
-                return NotFound();
-            }
-            */
+
+            _photoSevice.UpdatePhotoInfo(_mapper.Map<PhotoInfo>(photoInfo));
+
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeletePhoto(int id)
         {
-            if (!_photoSevice.DeletePhoto(id))
-            {
-                return NotFound();
-            }            
-            
+            _photoSevice.DeletePhoto(id);
             return NoContent();
         }        
     }
