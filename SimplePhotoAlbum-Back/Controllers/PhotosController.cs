@@ -24,30 +24,27 @@ namespace SimplePhotoAlbum_Back.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        private PhotoImageView ExtractPhotoImage(IFormCollection formCollection)
+        private static PhotoImageView ExtractPhotoImage(IFormCollection formCollection)
         {
             var file = formCollection.Files[0];
-            BinaryReader br = new BinaryReader(file.OpenReadStream());
-            PhotoImageView photoImage = new PhotoImageView()
+            var br = new BinaryReader(file.OpenReadStream());
+
+            return new PhotoImageView()
             {
                 FileName = file.FileName,
                 ImageType = file.ContentType,
                 Image = br.ReadBytes((Int32)file.Length)
             };
-
-            return photoImage;
         }
 
-        private PhotoInfoView ExtractPhotoInfo(IFormCollection formCollection)
+        private static PhotoInfoView ExtractPhotoInfo(IFormCollection formCollection)
         {
-            PhotoInfoView photoInfo = new PhotoInfoView()
+            return new PhotoInfoView()
             {
                 Id = 0,
                 Caption = formCollection["caption"].ToString(),
                 Description = formCollection["description"].ToString()
             };
-
-            return photoInfo;
         }
         #endregion
 

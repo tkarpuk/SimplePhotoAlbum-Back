@@ -4,11 +4,10 @@ namespace SimplePhotoAlbum_Back.Authorization
 {
     public class UserInspector
     {
-        private UserView _user = new UserView();
+        private readonly UserView _user;
         public UserInspector(string email, string password)
         {
-            _user.Email = email;
-            _user.Password = password;
+            _user = new UserView() { Email = email, Password = password };
         }
 
         public bool ChekUser()

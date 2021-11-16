@@ -20,15 +20,15 @@ namespace SimplePhotoAlbum_Back.Controllers
         [HttpPost]
         public IActionResult Login(string email, string password)
         {
-            UserInspector userInspector = new UserInspector(email, password);
+            var userInspector = new UserInspector(email, password);
             if (!userInspector.ChekUser())
             {
                 _logger.LogWarning($"Unknown user email {email}.");
                 return BadRequest(new { errorText = "Invalid email or password." });
             }
 
-            ClaimIndentity claimIndentity = new ClaimIndentity(userInspector.GetUser());
-            JwtCreator jwtCreator = new JwtCreator(claimIndentity.ReturnClaims());
+            var claimIndentity = new ClaimIndentity(userInspector.GetUser());
+            var jwtCreator = new JwtCreator(claimIndentity.ReturnClaims());
 
             return Ok(JsonSerializer.Serialize(jwtCreator.GetResponse()));
         }

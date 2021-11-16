@@ -7,7 +7,7 @@ namespace SimplePhotoAlbum.DAL.Repositories
 {
     public class PhotoRepository : IRepository<PhotoInfo>
     {
-        private ApplicationDb _db;
+        private readonly ApplicationDb _db;
         public PhotoRepository(ApplicationDb dbContext)
         {
             _db = dbContext;
