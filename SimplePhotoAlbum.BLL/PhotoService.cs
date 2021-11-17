@@ -1,4 +1,6 @@
-﻿using SimplePhotoAlbum.DAL;
+﻿using AutoMapper;
+using SimplePhotoAlbum.BLL.ModelsDto;
+using SimplePhotoAlbum.DAL;
 using SimplePhotoAlbum.DAL.Entities;
 using System.Collections.Generic;
 
@@ -7,36 +9,46 @@ namespace SimplePhotoAlbum.BLL
     public class PhotoService
     {
         private readonly UnitOfWork _unitOfWork;
-        public PhotoService(UnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        public PhotoService(UnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public IEnumerable<PhotoInfo> GetPhotosInfo(int pageSize, int pageN)
+        public IEnumerable<PhotoInfoDto> GetPhotosInfo(int pageSize, int pageN)
         {
-            return _unitOfWork.PhotoRepository.GetAll(pageSize, pageN);
+            var listPhotoInfo = _unitOfWork.PhotoRepository.GetAll(pageSize, pageN);
+            return _mapper.Map<IEnumerable<PhotoInfoDto>>(listPhotoInfo);
         }
 
-        public PhotoInfo GetPhotoInfoById(int id)
+        public PhotoInfoDto GetPhotoInfoById(int id)
         {
-            return _unitOfWork.PhotoRepository.Get(id);
+            var photoInfo = _unitOfWork.PhotoRepository.Get(id);
+            return _mapper.Map<PhotoInfoDto>(photoInfo);
         }
 
-        public PhotoImage GetImageByInfoId(int infoId)
+        public PhotoImageDto GetImageByInfoId(int infoId)
         {
-            return _unitOfWork.ImageRepository.GetByInfoId(infoId);
+            var photoImage = _unitOfWork.ImageRepository.GetByInfoId(infoId);
+            return _mapper.Map<PhotoImageDto>(photoImage);           
         }
 
-        public PhotoImage GetImageById(int Id)
+        public PhotoImageDto GetImageById(int Id)
         {
-            return _unitOfWork.ImageRepository.Get(Id);
+            var photoImage = _unitOfWork.ImageRepository.Get(Id);
+            return _mapper.Map<PhotoImageDto>(photoImage);
         }
 
-        public void SavePhoto(PhotoInfo photoInfo, PhotoImage photoImage)
+        public void SavePhoto(PhotoInfoDto photoInfoDto, PhotoImageDto photoImageDto)
         {
+            var photoInfo = _mapper.Map<PhotoInfo>(photoInfoDto);
+            var photoImage = _mapper.Map<PhotoImage>(photoImageDto);
+
             _unitOfWork.PhotoRepository.Create(photoInfo);
             photoImage.Info = photoInfo;
             _unitOfWork.ImageRepository.Create(photoImage);
+
             _unitOfWork.SaveAll();
         }
 
@@ -51,8 +63,9 @@ namespace SimplePhotoAlbum.BLL
             _unitOfWork.SaveAll();
         }
 
-        public void UpdatePhotoInfo(PhotoInfo photoInfo)
+        public void UpdatePhotoInfo(PhotoInfoDto photoInfoDto)
         {
+            var photoInfo = _mapper.Map<PhotoInfo>(photoInfoDto);
             _unitOfWork.PhotoRepository.Update(photoInfo);
             _unitOfWork.SaveAll();
         }

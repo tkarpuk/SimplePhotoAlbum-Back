@@ -13,10 +13,13 @@ namespace SimplePhotoAlbum_Back.Mappers
     {
         public MapperProfile()
         {
-            /*
+            CreateMap<PhotoInfo, PhotoInfoDto>().ReverseMap();
+            CreateMap<PhotoImage, PhotoImageDto>().ReverseMap();
+
             CreateMap<PhotoInfoView, PhotoInfoDto>().ReverseMap();
             CreateMap<PhotoImageView, PhotoImageDto>().ReverseMap();
-            */
+
+            // TODO: is it needed?
             CreateMap<PhotoInfoView, PhotoInfo>().ReverseMap();
             CreateMap<PhotoImageView, PhotoImage>().ReverseMap();
         }

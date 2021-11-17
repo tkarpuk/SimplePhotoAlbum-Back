@@ -9,8 +9,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using Microsoft.AspNetCore.Http;
-using SimplePhotoAlbum.DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
+using SimplePhotoAlbum.BLL.ModelsDto;
 
 namespace SimplePhotoAlbum_Back.Controllers
 {
@@ -101,8 +101,8 @@ namespace SimplePhotoAlbum_Back.Controllers
                 PhotoImageView photoImage = ExtractPhotoImage(formCollection);
 
                 _photoSevice.SavePhoto(
-                        _mapper.Map<PhotoInfo>(photoInfo),
-                        _mapper.Map<PhotoImage>(photoImage)
+                        _mapper.Map<PhotoInfoDto>(photoInfo),
+                        _mapper.Map<PhotoImageDto>(photoImage)
                         );
             }
             catch (Exception e)
@@ -122,7 +122,7 @@ namespace SimplePhotoAlbum_Back.Controllers
                 return BadRequest();
             }
 
-            _photoSevice.UpdatePhotoInfo(_mapper.Map<PhotoInfo>(photoInfo));
+            _photoSevice.UpdatePhotoInfo(_mapper.Map<PhotoInfoDto>(photoInfo));
 
             return NoContent();
         }
