@@ -1,5 +1,6 @@
 ﻿using SimplePhotoAlbum.DAL.Repositories;
 using System;
+using System.Threading.Tasks;
 
 namespace SimplePhotoAlbum.DAL
 {
@@ -35,9 +36,9 @@ namespace SimplePhotoAlbum.DAL
             }
         }
         
-        public void SaveAll()
+        public async Task SaveAsync()
         {
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
 
         public virtual void Dispose(bool disposing)

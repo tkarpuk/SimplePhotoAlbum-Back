@@ -2,6 +2,7 @@
 using SimplePhotoAlbum.DAL.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SimplePhotoAlbum.DAL.Repositories
 {
@@ -13,41 +14,41 @@ namespace SimplePhotoAlbum.DAL.Repositories
             _db = dbContext;
         }
 
-        public void Create(PhotoImage item)
+        public async Task CreateAsync(PhotoImage item)
         {
-            _db.PhotoImages.Add(item);
+            await Task.FromResult(_db.PhotoImages.Add(item));
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            PhotoImage photoImage = _db.PhotoImages.Find(id);
+            PhotoImage photoImage = await _db.PhotoImages.FindAsync(id);
             if (photoImage != null)
-                _db.PhotoImages.Remove(photoImage);
+                await Task.FromResult(_db.PhotoImages.Remove(photoImage));
         }
 
-        public PhotoImage Get(int id)
+        public async Task<PhotoImage> GetAsync(int id)
         {
-            return _db.PhotoImages.Find(id);
+            return await _db.PhotoImages.FindAsync(id);
         }
 
-        public PhotoImage GetByInfoId(int infoId)
+        public async Task<PhotoImage> GetByInfoIdAsync(int infoId)
         {
-            return _db.PhotoImages.FirstOrDefault(i => i.InfoId == infoId);
+            return await _db.PhotoImages.FirstOrDefaultAsync(i => i.InfoId == infoId);
         }
 
-        public IEnumerable<PhotoImage> GetAll(int limit, int offset)
+        public async Task<IEnumerable<PhotoImage>> GetAllAsync(int limit, int offset)
         {
-            return _db.PhotoImages.Skip(limit * (offset - 1)).Take(limit).OrderBy(i => i.Id);
+            return await _db.PhotoImages.Skip(limit * (offset - 1)).Take(limit).OrderBy(i => i.Id).ToListAsync();
         }
 
-        public int GetConunt()
+        public async Task<int> GetConuntAsync()
         {
-            return _db.PhotoImages.Count();
+            return await Task.FromResult(_db.PhotoImages.Count());
         }
 
-        public void Update(PhotoImage item)
+        public async Task UpdateAsync(PhotoImage item)
         {
-            _db.Entry(item).State = EntityState.Modified;
+            await Task.FromResult(_db.Entry(item).State = EntityState.Modified);
         }
     }
 }

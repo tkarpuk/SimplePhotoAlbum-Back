@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SimplePhotoAlbum.DAL.Repositories
 {
     interface IRepository<T> where T: class
     {
-        IEnumerable<T> GetAll(int limit, int offset);
-        T Get(int id);
-        void Create(T item);
-        void Update(T item);
-        void Delete(int id);
-        int GetConunt();
+        Task<IEnumerable<T>> GetAllAsync(int limit, int offset);
+        Task<T> GetAsync(int id);
+        Task CreateAsync(T item);
+        Task UpdateAsync(T item);
+        Task DeleteAsync(int id);
+        Task<int> GetConuntAsync();
     }
 }

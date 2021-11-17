@@ -3,6 +3,7 @@ using SimplePhotoAlbum.BLL.ModelsDto;
 using SimplePhotoAlbum.DAL;
 using SimplePhotoAlbum.DAL.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SimplePhotoAlbum.BLL
 {
@@ -16,58 +17,58 @@ namespace SimplePhotoAlbum.BLL
             _mapper = mapper;
         }
 
-        public IEnumerable<PhotoInfoDto> GetPhotosInfo(int pageSize, int pageN)
+        public async Task<IEnumerable<PhotoInfoDto>> GetPhotosInfoAsync(int pageSize, int pageN)
         {
-            var listPhotoInfo = _unitOfWork.PhotoRepository.GetAll(pageSize, pageN);
+            var listPhotoInfo = await _unitOfWork.PhotoRepository.GetAllAsync(pageSize, pageN);
             return _mapper.Map<IEnumerable<PhotoInfoDto>>(listPhotoInfo);
         }
 
-        public PhotoInfoDto GetPhotoInfoById(int id)
+        public async Task<PhotoInfoDto> GetPhotoInfoByIdAsync(int id)
         {
-            var photoInfo = _unitOfWork.PhotoRepository.Get(id);
+            var photoInfo = await _unitOfWork.PhotoRepository.GetAsync(id);
             return _mapper.Map<PhotoInfoDto>(photoInfo);
         }
 
-        public PhotoImageDto GetImageByInfoId(int infoId)
+        public async Task<PhotoImageDto> GetImageByInfoIdAsync(int infoId)
         {
-            var photoImage = _unitOfWork.ImageRepository.GetByInfoId(infoId);
+            var photoImage = await _unitOfWork.ImageRepository.GetByInfoIdAsync(infoId);
             return _mapper.Map<PhotoImageDto>(photoImage);           
         }
 
-        public PhotoImageDto GetImageById(int Id)
+        public async Task<PhotoImageDto> GetImageByIdAsync(int Id)
         {
-            var photoImage = _unitOfWork.ImageRepository.Get(Id);
+            var photoImage = await _unitOfWork.ImageRepository.GetAsync(Id);
             return _mapper.Map<PhotoImageDto>(photoImage);
         }
 
-        public void SavePhoto(PhotoInfoDto photoInfoDto, PhotoImageDto photoImageDto)
+        public async Task SavePhotoAsync(PhotoInfoDto photoInfoDto, PhotoImageDto photoImageDto)
         {
             var photoInfo = _mapper.Map<PhotoInfo>(photoInfoDto);
             var photoImage = _mapper.Map<PhotoImage>(photoImageDto);
 
-            _unitOfWork.PhotoRepository.Create(photoInfo);
+            await _unitOfWork.PhotoRepository.CreateAsync(photoInfo);
             photoImage.Info = photoInfo;
-            _unitOfWork.ImageRepository.Create(photoImage);
+            await _unitOfWork.ImageRepository.CreateAsync(photoImage);
 
-            _unitOfWork.SaveAll();
+            await _unitOfWork.SaveAsync();
         }
 
-        public int GetCountPhotos()
+        public async Task<int> GetCountPhotosAsync()
         {
-            return _unitOfWork.PhotoRepository.GetConunt();
+            return await _unitOfWork.PhotoRepository.GetConuntAsync();
         }
 
-        public void DeletePhoto(int id)
+        public async Task DeletePhotoAsync(int id)
         {
-            _unitOfWork.PhotoRepository.Delete(id);
-            _unitOfWork.SaveAll();
+            await _unitOfWork.PhotoRepository.DeleteAsync(id);
+            await _unitOfWork.SaveAsync();
         }
 
-        public void UpdatePhotoInfo(PhotoInfoDto photoInfoDto)
+        public async Task UpdatePhotoInfoAsync(PhotoInfoDto photoInfoDto)
         {
             var photoInfo = _mapper.Map<PhotoInfo>(photoInfoDto);
-            _unitOfWork.PhotoRepository.Update(photoInfo);
-            _unitOfWork.SaveAll();
+            await _unitOfWork.PhotoRepository.UpdateAsync(photoInfo);
+            await _unitOfWork.SaveAsync();
         }
         /*
         public List<PhotoInfoDto> GetPhotosInfo(int pageSize, int pageN)

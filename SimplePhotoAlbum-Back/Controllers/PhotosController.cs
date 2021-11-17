@@ -24,17 +24,20 @@ namespace SimplePhotoAlbum_Back.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        private static PhotoImageView ExtractPhotoImage(IFormCollection formCollection)
+        private static async Task<PhotoImageView> ExtractPhotoImageAsync(IFormCollection formCollection)
         {
-            var file = formCollection.Files[0];
-            var br = new BinaryReader(file.OpenReadStream());
+            var file = formCollection.Files[0];            
 
-            return new PhotoImageView()
+            var photoImageView = new PhotoImageView()
             {
                 FileName = file.FileName,
-                ImageType = file.ContentType,
-                Image = br.ReadBytes((Int32)file.Length)
+                ImageType = file.ContentType                
             };
+
+            var br = new BinaryReader(file.OpenReadStream());
+            photoImageView.Image = await Task.FromResult(br.ReadBytes((Int32)file.Length));
+
+            return photoImageView;
         }
 
         private static PhotoInfoView ExtractPhotoInfo(IFormCollection formCollection)
@@ -56,36 +59,36 @@ namespace SimplePhotoAlbum_Back.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<PhotoInfoView>> GetAll()
+        public async Task<ActionResult<IEnumerable<PhotoInfoView>>> GetAll()
         {
             int pageSize = Request.Query["pageSize"].ToString().StrToIntDefault(10);
             int pageN = Request.Query["pageN"].ToString().StrToIntDefault(1);
 
-            var photoInfoItems = _mapper.Map<IEnumerable<PhotoInfoView>>(_photoSevice.GetPhotosInfo(pageSize, pageN));
+            var photoInfoItems = _mapper.Map<IEnumerable<PhotoInfoView>>(await _photoSevice.GetPhotosInfoAsync(pageSize, pageN));
 
             return Ok(photoInfoItems);
         }
 
         [HttpGet("count")]
-        public ActionResult<int> GetCountPhotos()
+        public async Task<ActionResult<int>> GetCountPhotos()
         {
-            int countPhotos = _photoSevice.GetCountPhotos();
+            int countPhotos = await _photoSevice.GetCountPhotosAsync();
 
             return Ok(countPhotos);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<PhotoInfoView> GetPhotoById(int id)
+        public async Task<ActionResult<PhotoInfoView>> GetPhotoById(int id)
         {
-            var photoInfo = _mapper.Map<PhotoInfoView>(_photoSevice.GetPhotoInfoById(id));
+            var photoInfo = _mapper.Map<PhotoInfoView>(await _photoSevice.GetPhotoInfoByIdAsync(id));
 
             return Ok(photoInfo);
         }
 
         [HttpGet("{id}/image")]
-        public ActionResult<PhotoImageView> GetImageById(int id)
+        public async Task<ActionResult<PhotoImageView>> GetImageById(int id)
         {
-            var photoImage = _mapper.Map<PhotoImageView>(_photoSevice.GetImageByInfoId(id));
+            var photoImage = _mapper.Map<PhotoImageView>(await _photoSevice.GetImageByInfoIdAsync(id));
 
             return Ok(photoImage);
         }
@@ -98,9 +101,9 @@ namespace SimplePhotoAlbum_Back.Controllers
             try
             {
                 PhotoInfoView photoInfo = ExtractPhotoInfo(formCollection);
-                PhotoImageView photoImage = ExtractPhotoImage(formCollection);
+                PhotoImageView photoImage = await ExtractPhotoImageAsync(formCollection);
 
-                _photoSevice.SavePhoto(
+                await _photoSevice.SavePhotoAsync(
                         _mapper.Map<PhotoInfoDto>(photoInfo),
                         _mapper.Map<PhotoImageDto>(photoImage)
                         );
@@ -115,22 +118,22 @@ namespace SimplePhotoAlbum_Back.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdatePhoto(int id, PhotoInfoView photoInfo)
+        public async Task<IActionResult> UpdatePhoto(int id, PhotoInfoView photoInfo)
         {
             if (id != photoInfo.Id)
             {
                 return BadRequest();
             }
 
-            _photoSevice.UpdatePhotoInfo(_mapper.Map<PhotoInfoDto>(photoInfo));
+            await _photoSevice.UpdatePhotoInfoAsync(_mapper.Map<PhotoInfoDto>(photoInfo));
 
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeletePhoto(int id)
+        public async Task<IActionResult> DeletePhoto(int id)
         {
-            _photoSevice.DeletePhoto(id);
+            await _photoSevice.DeletePhotoAsync(id);
             return NoContent();
         }        
     }

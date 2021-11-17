@@ -2,6 +2,7 @@
 using SimplePhotoAlbum.DAL.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SimplePhotoAlbum.DAL.Repositories
 {
@@ -13,36 +14,36 @@ namespace SimplePhotoAlbum.DAL.Repositories
             _db = dbContext;
         }
 
-        public void Create(PhotoInfo item)
+        public async Task CreateAsync(PhotoInfo item)
         {
-            _db.PhotoInfos.Add(item);
+            await Task.FromResult(_db.PhotoInfos.Add(item));
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            PhotoInfo photoInfo = _db.PhotoInfos.Find(id);
+            PhotoInfo photoInfo = await _db.PhotoInfos.FindAsync(id);
             if (photoInfo != null)
-                _db.PhotoInfos.Remove(photoInfo);
+                await Task.FromResult(_db.PhotoInfos.Remove(photoInfo));
         }
 
-        public PhotoInfo Get(int id)
+        public async Task<PhotoInfo> GetAsync(int id)
         {
-            return _db.PhotoInfos.Find(id);
+            return await _db.PhotoInfos.FindAsync(id);
         }
 
-        public int GetConunt()
+        public async Task<int> GetConuntAsync()
         {
-            return _db.PhotoInfos.Count();
+            return await Task.FromResult(_db.PhotoInfos.Count());
         }
 
-        public IEnumerable<PhotoInfo> GetAll(int limit, int offset)
+        public async Task<IEnumerable<PhotoInfo>> GetAllAsync(int limit, int offset)
         {
-            return _db.PhotoInfos.Skip(limit * (offset - 1)).Take(limit).OrderBy(p => p.Id);
+            return await _db.PhotoInfos.Skip(limit * (offset - 1)).Take(limit).OrderBy(p => p.Id).ToListAsync();
         }
 
-        public void Update(PhotoInfo item)
+        public async Task UpdateAsync(PhotoInfo item)
         {
-            _db.Entry(item).State = EntityState.Modified;
+            await Task.FromResult(_db.Entry(item).State = EntityState.Modified);
         }
     }
 }
